@@ -8,5 +8,16 @@
 </head>
 <body>
 	<h1>Weather App</h1>
+
+	{% if current_location %}
+		<p>{{ current_location }}</p>
+
+	{% else %}
+		<p>Unable to locate</p>
+
+	{% endif %}
+	
+
+	<p>This app uses GeoLite2 data created by MaxMind, available <a href="https://www.maxmind.com">here</a>.</p>
 </body>
 </html>

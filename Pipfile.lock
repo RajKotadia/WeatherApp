@@ -62,8 +62,7 @@
         },
         "maxminddb": {
             "hashes": [
-                "sha256:449a1713d37320d777d0db286286ab22890f0a176492ecf3ad8d9319108f2f79",
-                "sha256:faac75d9b09700191e40af7c86ffcd3a33c5d4002996e7dd13f5d61ae7a553b8"
+                "sha256:449a1713d37320d777d0db286286ab22890f0a176492ecf3ad8d9319108f2f79"
             ],
             "version": "==1.5.1"
         },

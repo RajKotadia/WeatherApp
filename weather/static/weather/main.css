@@ -1,0 +1,32 @@
+body {
+	background-color: #fafafa;
+	text-align: center;
+}
+
+header{
+	margin-top: 25px;
+}
+
+main{
+	margin: 30px;
+	font-family: Verdana, Tahoma, sans-serif;
+}
+
+span{
+	font-size: 18px;
+	display: inline-block;
+	padding: 20px;
+}
+
+.card{
+	width: 75%;
+	margin: auto;
+	margin-bottom: 23px;
+	box-shadow: 4px 4px 18px lightgray;
+}
+
+
+footer{
+	font-family: Verdana, Tahoma, sans-serif;
+	font-size: 12px;
+} 

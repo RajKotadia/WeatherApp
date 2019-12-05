@@ -6,26 +6,36 @@ from .forms import CityForm
 
 from django.contrib import messages
 
+import requests
+import os
+
 
 display = False
-city = None
+current_location_weather = None
+other_location_weather = None
 
 
 def index(request):
 
-	global display, city
+	global display, current_location_weather, other_location_weather
+	print(f"function start {display}")
+	print(f"f start {other_location_weather}")
 
 	# Using GeoIP2 to get user's current location based on user IP address
-	g = GeoIP2()
+	if current_location_weather == None:	
+		g = GeoIP2()
 
-	x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-	if x_forwarded_for:
-		ip = x_forwarded_for.split(',')[0]
-	else:
-		ip = request.META.get('REMOTE_ADDR')
+		x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+		if x_forwarded_for:
+			ip = x_forwarded_for.split(',')[0]
+		else:
+			ip = request.META.get('REMOTE_ADDR')
 
-	try: current_location = g.city(ip)['city']
-	except: current_location = None	
+		try:
+			current_location = g.city(ip)['city']
+			current_location_weather = get_weather(request, current_location)
+		except:
+			current_location_weather = None	
 	
 	# Handle user input for other location
 	if request.method == 'POST':
@@ -33,25 +43,45 @@ def index(request):
 
 		if form.is_valid():
 			city = form.cleaned_data['city'].lower()
-
-			# Make an API Request
-			if city == 'mumbai':
+			other_location_weather = get_weather(request, city)
+			if other_location_weather: 
 				display = True
-				
-			else:
-				display = False	
-				messages.error(request, 'City does not exist!')
-
+				print(display)
+				print(other_location_weather)
 			return HttpResponseRedirect('/')		 
 	
 	else:
 		form = CityForm()
 
 	context = {
-		'current_location': current_location,
-		'other_city': city,
+		'current_location_weather': current_location_weather,
+		'other_location_weather': other_location_weather,
 		'form': form,
 		'display': display
 	}
 	
 	return render(request, 'weather/index.html', context)
+
+
+# Making an API request to get the current weather
+def get_weather(request, city):
+	
+	base_url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&units=metric&appid={os.environ['API_KEY']}"
+	response = requests.get(base_url)
+
+	if response:
+		data = response.json()
+		print(data)
+		weather= {
+			'city': data['name'],
+			'country': data['sys']['country'],
+			'temperature': data['main']['temp'],
+			'description': data['weather'][0]['description'].capitalize(),
+			'icon': data['weather'][0]['icon']
+		}
+		print(weather)
+		return weather				
+
+	else:
+		messages.error(request, 'No results!')
+		return None

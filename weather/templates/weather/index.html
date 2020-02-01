@@ -18,72 +18,88 @@
 	<link rel="stylesheet" href="{% static 'weather/main.css' %}">
 </head>
 
-<body>
+<body class="container">
 
-	<header>
-		<h1>WeatherNow</h1>
-	</header>
-
-	<!-- Weather Details -->
-	<main class="container">
-		
-		<!-- User's current location weather details -->
-		<div>
-			<span>
-				<i class="fas fa-map-marker-alt"></i>
-				Current Location
-			</span>
-				
-			<div class="card">
-				<!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
-				<div class="card-body">
-					{% if current_location %}
-						<p class="card-text">{{ current_location }}</p>
+	<div id="content-block">
+	<div id="content">
+		<header>
+			<h1>WeatherNow</h1>
+		</header>
+	
+		<!-- Weather Details -->
+		<main>		
+			<!-- User's current location weather details -->
+			<div>
+				<span>
+					<i class="fas fa-map-marker-alt"></i>
+					Current Location
+				</span>
 					
-					{% else %}
-						<p class="card-text">Unable to locate</p>
-		
-					{% endif %}		
+				<div class="card">
+					<div class="card-body">
+						{% if current_location_weather %}
+							<h5 class="card-title mt-3 mb-0">{{current_location_weather.city}}, {{ current_location_weather.country }}</h5>
+							<div class="media justify-content-center">
+								<div class="col">
+									<img src="http://openweathermap.org/img/wn/{{ current_location_weather.icon }}@2x.png" alt="Weather image" style="text-align:right;">
+								</div>
+								<div class="col media-body card-body">
+									<p class="card-text text-primary">{{current_location_weather.temperature}}&deg;C</p>
+									<b class="card-text mb-2 text-secondary">{{current_location_weather.description}}</b>
+								</div>
+							</div>					
+						{% else %}
+							<p class="card-text text-danger">Unable to locate</p>		
+						{% endif %}		
+					</div>
 				</div>
 			</div>
-		</div>
-
-		<!-- User entered city's weather details -->
-		<div>
-			<span>
-				<i class="fas fa-map-marked-alt"></i>
-				Other Location
-			</span>	
-			
-			<form  method="POST" class="form-inline justify-content-center">
-				{% csrf_token %}
-				<div class="input-group mb-4 ml-4 mr-4">
-					{{ form }}
-				<div class="input-group-btn ml-2">
-					<button class="btn btn-primary"><i class="fas fa-search"></i></button>
-				</div></div>
-			</form>
-
-			{% if display %}
-			<div class="card">
-				<!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
-				<div class="card-body">
-					<p class="card-text">{{ other_city }}</p>
-				</div>
-			</div>
-			{% else %}
+	
+			<!-- User entered city's weather details -->
+			<div>
+				<span>
+					<i class="fas fa-map-marked-alt"></i>
+					Other Location
+				</span>	
+				
+				<form  method="POST" class="form-inline justify-content-center">
+					{% csrf_token %}
+					<div class="input-group mb-4 ml-4 mr-4">
+						{{ form }}
+					<div class="input-group-btn ml-2">
+						<button class="btn btn-primary"><i class="fas fa-search"></i></button>
+					</div></div>
+				</form>
+	
+				{% if other_location_weather %}
+					<div class="card">
+						<h5 class="card-title mt-3 mb-0">{{other_location_weather.city}}, {{ other_location_weather.country }}</h5>
+						<div class="media justify-content-center">
+							<div class="col">
+								<img src="http://openweathermap.org/img/wn/{{ other_location_weather.icon }}@2x.png" alt="Weather image" style="text-align:right;">
+							</div>
+							<div class="col media-body card-body">
+								<p class="card-text text-primary">{{other_location_weather.temperature}}&deg;C</p>
+								<b class="card-text mb-2 text-secondary">{{other_location_weather.description}}</b>
+							</div>
+						</div>
+					</div>
+				{% endif %}
+	
 				{% if messages %}
 					{% for message in messages %}
-					<div class="alert alert-danger">{{ message }}</div>
+					<div class="alert alert-danger text-center">{{ message }}</div>
 					{% endfor %}
 				{% endif %}
+	
+			</div>
+		</main>				
+	</div>
+	</div>
 
-			{% endif %}
-		</div>
-	</main>	
-
-	<footer class="container">
-		<p>This app uses GeoLite2 data created by MaxMind, available <a href="https://www.maxmind.com">here</a>.</p>
+	<footer id="footer">
+		<p class="mb-1">Developed by <a href="https://github.com/RajKotadia">Raj Kotadia</a></p>
+		<p class="mb-0">This website uses GeoLite2 data by MaxMind, available <a href="https://www.maxmind.com">here</a>.</p>
 	</footer>
 
 	

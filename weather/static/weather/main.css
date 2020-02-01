@@ -1,32 +1,66 @@
 body {
 	background-color: #fafafa;
 	text-align: center;
+	height: 100vh;
+}
+
+#content-block{
+	min-height: 100vh;
+}
+
+#content{
+	overflow: auto;
+	padding-bottom: 60px;
 }
 
 header{
-	margin-top: 25px;
+	margin-top: 15px;
 }
 
 main{
-	margin: 30px;
+	margin: 20px;
 	font-family: Verdana, Tahoma, sans-serif;
 }
 
 span{
 	font-size: 18px;
 	display: inline-block;
-	padding: 20px;
+	padding: 15px;
 }
 
 .card{
-	width: 75%;
+	width: 60%;
 	margin: auto;
 	margin-bottom: 23px;
 	box-shadow: 4px 4px 18px lightgray;
 }
 
+.card-text{
+	margin: 0px;
+}
 
-footer{
+.alert{
+	width: 45%;
+	margin: auto;
+}
+
+#footer{
 	font-family: Verdana, Tahoma, sans-serif;
 	font-size: 12px;
+	position: relative;
+	height: 60px;
+	margin-top: -60px;
+	clear: both;
 } 
+
+
+
+@media (max-width: 576px){
+	.card{
+		width: 90%;		
+	}
+
+	.alert{
+		width: 65%;
+	}	
+}

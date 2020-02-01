@@ -1,16 +1,14 @@
 from django.shortcuts import render
-from django.contrib.gis.geoip2 import GeoIP2
-
 from django.http import HttpResponseRedirect
-from .forms import CityForm
 
+from django.contrib.gis.geoip2 import GeoIP2
 from django.contrib import messages
+from .forms import CityForm
 
 import requests
 import os
 
 
-display = False
 current_location_weather = None
 other_location_weather = None
 
@@ -18,13 +16,10 @@ other_location_weather = None
 def index(request):
 
 	global display, current_location_weather, other_location_weather
-	print(f"function start {display}")
-	print(f"f start {other_location_weather}")
 
 	# Using GeoIP2 to get user's current location based on user IP address
 	if current_location_weather == None:	
 		g = GeoIP2()
-
 		x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
 		if x_forwarded_for:
 			ip = x_forwarded_for.split(',')[0]
@@ -44,10 +39,6 @@ def index(request):
 		if form.is_valid():
 			city = form.cleaned_data['city'].lower()
 			other_location_weather = get_weather(request, city)
-			if other_location_weather: 
-				display = True
-				print(display)
-				print(other_location_weather)
 			return HttpResponseRedirect('/')		 
 	
 	else:
@@ -57,7 +48,7 @@ def index(request):
 		'current_location_weather': current_location_weather,
 		'other_location_weather': other_location_weather,
 		'form': form,
-		'display': display
+		# 'display': display
 	}
 	
 	return render(request, 'weather/index.html', context)
@@ -71,7 +62,6 @@ def get_weather(request, city):
 
 	if response:
 		data = response.json()
-		print(data)
 		weather= {
 			'city': data['name'],
 			'country': data['sys']['country'],
@@ -79,7 +69,6 @@ def get_weather(request, city):
 			'description': data['weather'][0]['description'].capitalize(),
 			'icon': data['weather'][0]['icon']
 		}
-		print(weather)
 		return weather				
 
 	else:
